@@ -1,20 +1,31 @@
+/* eslint-disable import/no-cycle */
 import express from "express";
-import { editProfile } from "../controllers/userController";
+import routes from "../routes";
+
 import {
   deleteVideo,
-  editVideo,
-  upload,
+  getEditVideo,
+  getUpload,
+  postEditVideo,
+  postUpload,
   videoDetail,
-  videos,
 } from "../controllers/videoController";
-import routes from "../routes";
+import { uploadVideo } from "../middlewares";
 
 const videoRouter = express.Router();
 
-videoRouter.get(routes.videos, videos);
-videoRouter.get(routes.upload, upload);
-videoRouter.get(routes.videoDetail, videoDetail);
-videoRouter.get(routes.editVideo, editVideo);
-videoRouter.get(routes.deleteVideo, deleteVideo);
+//upload
+videoRouter.get(routes.upload, getUpload);
+videoRouter.post(routes.upload, uploadVideo, postUpload);
+
+//video detail
+videoRouter.get(routes.videoDetail(), videoDetail);
+
+//video edit
+videoRouter.get(routes.editVideo(), getEditVideo);
+videoRouter.post(routes.editVideo(), postEditVideo);
+
+//delete video
+videoRouter.get(routes.deleteVideo(), deleteVideo);
 
 export default videoRouter;
